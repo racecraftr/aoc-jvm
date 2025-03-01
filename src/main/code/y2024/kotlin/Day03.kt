@@ -4,35 +4,21 @@ import day.Day
 
 class Day3: Day(2024, 3){
 
-
-    override fun part1(): Int {
-        val re = Regex("mul\\(\\d+,\\d+\\)")
-        val digRe = Regex("\\d+")
-        var sum = 0
-        for (statement in re.findAll(input)) {
-            val s = statement.value
-            val nums = digRe.findAll(s).toList().map { it.value.toInt() }
-            sum += nums[0] * nums[1]
-        }
-        return sum
+    private fun calcMul(s: String): Int {
+        return Regex("\\d+").findAll(s).toList().map { it.value.toInt() }.run { this[0] * this[1] }
     }
 
-    override fun part2(): Int {
-        val re = Regex("(mul\\(\\d+,\\d+\\))|(do(n't)*\\(\\))")
-        val digRe = Regex("\\d+")
+    override fun part1(): Any {
+        return Regex("mul\\(\\d+,\\d+\\)").findAll(input).sumOf { calcMul(it.value) }
+    }
+
+    override fun part2(): Any {
+        val re = Regex("(mul\\(\\d+,\\d+\\))|(do(n't)?\\(\\))")
         var sum = 0; var enabled = true
-        for (statement in re.findAll(input)) {
-            val s = statement.value
-            if (s.startsWith("mul") && enabled) {
-                val nums = digRe.findAll(s).toList().map { it.value.toInt() }
-                sum += nums[0] * nums[1]
-            }
-            if (s.startsWith("do")) {
-                enabled = true
-            }
-            if (s.startsWith("don't")) {
-                enabled = false
-            }
+        for (statement in re.findAll(input).map { it.value }) {
+            if (statement.startsWith("mul") && enabled) {
+                sum += calcMul(statement)
+            } else enabled = statement == "do()"
         }
         return sum
     }

@@ -20,7 +20,12 @@ abstract class Day(private val year: Int, private val day: Int) {
 
     fun run() {
         println("Running Year $year day $day")
-        println("Part 1: ${part1()}")
-        println("Part 2: ${part2()}")
+        val start = System.currentTimeMillis()
+        val p1 = part1()
+        println("Part 1: $p1")
+        val p2 = part2()
+        val end = System.currentTimeMillis()
+        println("Part 2: $p2")
+        println("Execution Time: ${(end - start).toFloat() / 1000} seconds")
     }
 }
